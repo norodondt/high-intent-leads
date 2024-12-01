@@ -55,6 +55,15 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			'subtle-bounce': {
+  				'0%, 100%': { transform: 'translateY(0)' },
+  				'50%': { transform: 'translateY(-4px)' },
+  			}
+  		},
+  		animation: {
+  			'subtle-bounce': 'subtle-bounce 3s ease-in-out infinite',
   		}
   	}
   },

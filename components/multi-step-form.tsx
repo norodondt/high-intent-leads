@@ -9,13 +9,14 @@ import { StepTwo } from "./step-two";
 import { StepThree } from "./step-three";
 import { StepFour } from "./step-four";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, PlayCircle } from "lucide-react";
 import type {
   DataPoint,
   FormData,
   LeadSource,
   TargetPosition,
 } from "../types/form";
+import Script from "next/script";
 
 export default function MultiStepForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -29,6 +30,7 @@ export default function MultiStepForm() {
       phone: "",
     },
   });
+  const [showVideo, setShowVideo] = useState(false);
 
   const totalSteps = 4;
 
@@ -91,14 +93,32 @@ export default function MultiStepForm() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 py-12 px-4">
       <div className="max-w-3xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-            Wir besorgen dir die 5% der Kontakte, die dein Produkt jetzt suchen
-          </h1>
+        <div className="text-center space-y-4">
           <p className="text-muted-foreground">
             Sag uns, wonach du suchst, und wir finden die richtigen Leads für
             dich
           </p>
+
+          <div className="pt-4">
+            <Button
+              variant="outline"
+              size="lg"
+              className="group relative bg-white/50 hover:bg-white/80 border-orange-200 hover:border-orange-300 text-orange-700 hover:text-orange-800 shadow-sm hover:shadow-md transition-all duration-300 animate-subtle-bounce"
+              onClick={() => setShowVideo(true)}
+            >
+              <div className="absolute left-3 w-6 h-6">
+                <div className="absolute inset-0 rounded-full bg-orange-400/20 animate-ping" />
+                <div className="absolute inset-0 rounded-full bg-orange-400/20 animate-pulse" />
+              </div>
+              <PlayCircle className="w-6 h-6 mr-2 text-orange-500 group-hover:text-orange-600 relative z-10 group-hover:scale-110 transition-transform duration-300" />
+              <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-300">
+                Wie machen wir das?{" "}
+                <span className="font-normal text-orange-600/80">
+                  (9 Min. Video)
+                </span>
+              </span>
+            </Button>
+          </div>
         </div>
 
         <ProgressIndicator currentStep={currentStep} totalSteps={totalSteps} />
@@ -121,6 +141,13 @@ export default function MultiStepForm() {
                   setFormData((prev) => ({
                     ...prev,
                     similarCompany: value,
+                  }));
+                }}
+                customSource={formData.customSource}
+                onCustomSourceChange={(value: string) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    customSource: value,
                   }));
                 }}
               />
@@ -277,6 +304,84 @@ export default function MultiStepForm() {
               </Button>
             </div>
           </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showVideo} onOpenChange={setShowVideo}>
+        <DialogContent className="sm:max-w-4xl">
+          <DialogHeader className="space-y-2 mb-2">
+            <h3 className="text-xl font-semibold text-center">
+              So finden wir deine idealen Leads
+            </h3>
+            <p className="text-muted-foreground text-center text-sm">
+              In diesem Video erklären wir dir Schritt für Schritt unseren
+              Prozess
+            </p>
+          </DialogHeader>
+          <div className="aspect-video w-full">
+            <Script
+              src="https://fast.wistia.com/embed/medias/2jlcw5n6up.jsonp"
+              strategy="lazyOnload"
+            />
+            <Script
+              src="https://fast.wistia.com/assets/external/E-v1.js"
+              strategy="lazyOnload"
+            />
+            <div
+              className="wistia_responsive_padding"
+              style={{ padding: "56.25% 0 0 0", position: "relative" }}
+            >
+              <div
+                className="wistia_responsive_wrapper"
+                style={{
+                  height: "100%",
+                  left: 0,
+                  position: "absolute",
+                  top: 0,
+                  width: "100%",
+                }}
+              >
+                <div
+                  className="wistia_embed wistia_async_2jlcw5n6up seo=false videoFoam=true"
+                  style={{
+                    height: "100%",
+                    position: "relative",
+                    width: "100%",
+                  }}
+                >
+                  <div
+                    className="wistia_swatch"
+                    style={{
+                      height: "100%",
+                      left: 0,
+                      opacity: 0,
+                      overflow: "hidden",
+                      position: "absolute",
+                      top: 0,
+                      transition: "opacity 200ms",
+                      width: "100%",
+                    }}
+                  >
+                    <img
+                      src="https://fast.wistia.com/embed/medias/2jlcw5n6up/swatch"
+                      style={{
+                        filter: "blur(5px)",
+                        height: "100%",
+                        objectFit: "contain",
+                        width: "100%",
+                      }}
+                      alt=""
+                      aria-hidden="true"
+                      onLoad={(e) => {
+                        // @ts-ignore
+                        e.currentTarget.parentNode.style.opacity = 1;
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

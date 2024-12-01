@@ -5,6 +5,7 @@ export type LeadSource =
   | 'hiring-companies'
   | 'similar-companies'
   | 'specific-websites'
+  | 'custom-source'
 
 export type DataPoint = 
   | 'email'
@@ -20,6 +21,7 @@ export type TargetPosition =
 export interface FormData {
   leadSources: LeadSource[]
   similarCompany?: string
+  customSource?: string
   dataPoints: DataPoint[]
   targetPosition: TargetPosition
   specificRole?: string
