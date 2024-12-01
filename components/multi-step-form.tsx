@@ -17,8 +17,15 @@ import type {
   TargetPosition,
 } from "../types/form";
 import Script from "next/script";
+import { cn } from "@/lib/utils";
 
-export default function MultiStepForm() {
+interface MultiStepFormProps {
+  isEmbedded?: boolean;
+}
+
+export default function MultiStepForm({
+  isEmbedded = false,
+}: MultiStepFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -91,18 +98,38 @@ export default function MultiStepForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 py-12 px-4">
-      <div className="max-w-3xl mx-auto space-y-8">
-        <div className="text-center space-y-4">
+    <div
+      className={cn(
+        "bg-gradient-to-b from-background to-muted/20",
+        isEmbedded
+          ? "min-h-[calc(100vh-2rem)] py-4 px-2"
+          : "min-h-screen py-12 px-4"
+      )}
+    >
+      <div
+        className={cn(
+          "mx-auto space-y-8",
+          isEmbedded ? "max-w-2xl" : "max-w-3xl"
+        )}
+      >
+        <div
+          className={cn("text-center", isEmbedded ? "space-y-2" : "space-y-4")}
+        >
+          {!isEmbedded && (
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              Wir besorgen dir die 5% der Kontakte, die dein Produkt jetzt
+              suchen
+            </h1>
+          )}
           <p className="text-muted-foreground">
             Sag uns, wonach du suchst, und wir finden die richtigen Leads für
             dich
           </p>
 
-          <div className="pt-4">
+          <div className={cn(isEmbedded ? "pt-2" : "pt-4")}>
             <Button
               variant="outline"
-              size="lg"
+              size={isEmbedded ? "default" : "lg"}
               className="group relative bg-white/50 hover:bg-white/80 border-orange-200 hover:border-orange-300 text-orange-700 hover:text-orange-800 shadow-sm hover:shadow-md transition-all duration-300 animate-subtle-bounce"
               onClick={() => setShowVideo(true)}
             >
@@ -121,10 +148,14 @@ export default function MultiStepForm() {
           </div>
         </div>
 
-        <ProgressIndicator currentStep={currentStep} totalSteps={totalSteps} />
+        <ProgressIndicator
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          className={cn(isEmbedded && "scale-90")}
+        />
 
         <Card>
-          <CardContent className="pt-6">
+          <CardContent className={cn(isEmbedded ? "pt-4" : "pt-6")}>
             {currentStep === 1 && (
               <StepOne
                 selectedSources={formData.leadSources}

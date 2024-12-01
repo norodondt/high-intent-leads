@@ -70,3 +70,26 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.embedded {
+  --radius: 0.5rem;
+}
+
+.embedded .card {
+  border-radius: var(--radius);
+}
+
+.embedded .dialog-content {
+  margin: 1rem;
+}
+
+@media (max-width: 640px) {
+  .embedded {
+    --radius: 0;
+  }
+  
+  .embedded .card {
+    border-left: 0;
+    border-right: 0;
+  }
+}
