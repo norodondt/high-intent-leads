@@ -22,10 +22,14 @@ import Image from "next/image";
 
 interface MultiStepFormProps {
   isEmbedded?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export default function MultiStepForm({
   isEmbedded = false,
+  width = 1280,
+  height = 720,
 }: MultiStepFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -113,31 +117,27 @@ export default function MultiStepForm({
       suppressHydrationWarning
       className={cn(
         "bg-gradient-to-b from-background to-muted/20",
-        isEmbedded
-          ? "min-h-[calc(100vh-2rem)] py-4 px-2"
-          : "min-h-screen py-12 px-4"
+        isEmbedded ? "py-4 px-2" : "min-h-screen py-12 px-4"
       )}
+      style={
+        isEmbedded
+          ? {
+              width: width,
+              height: height,
+              overflow: "auto",
+            }
+          : undefined
+      }
     >
       <div
         className={cn(
-          "mx-auto space-y-8",
-          isEmbedded ? "max-w-2xl" : "max-w-3xl"
+          "mx-auto space-y-6",
+          isEmbedded ? "max-w-[90%]" : "max-w-3xl"
         )}
       >
         <div
           className={cn("text-center", isEmbedded ? "space-y-2" : "space-y-4")}
         >
-          {!isEmbedded && (
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Wir besorgen dir die 5% der Kontakte, die dein Produkt jetzt
-              suchen
-            </h1>
-          )}
-          <p className="text-muted-foreground">
-            Sag uns, wonach du suchst, und wir finden die richtigen Leads für
-            dich
-          </p>
-
           <div className={cn(isEmbedded ? "pt-2" : "pt-4")}>
             <Button
               variant="outline"
