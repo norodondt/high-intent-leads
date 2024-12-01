@@ -7,6 +7,7 @@ import {
   Building2,
   Globe2,
   Plus,
+  LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +35,7 @@ export function StepOne({
   const sources: {
     id: LeadSource;
     label: string;
-    icon: React.ComponentType<any>;
+    icon: LucideIcon;
     color: string;
     bgColor: string;
   }[] = [

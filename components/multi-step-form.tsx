@@ -18,6 +18,7 @@ import type {
 } from "../types/form";
 import Script from "next/script";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface MultiStepFormProps {
   isEmbedded?: boolean;
@@ -393,18 +394,17 @@ export default function MultiStepForm({
                       width: "100%",
                     }}
                   >
-                    <img
+                    <Image
                       src="https://fast.wistia.com/embed/medias/2jlcw5n6up/swatch"
+                      alt=""
+                      fill
                       style={{
                         filter: "blur(5px)",
-                        height: "100%",
                         objectFit: "contain",
-                        width: "100%",
                       }}
-                      alt=""
                       aria-hidden="true"
                       onLoad={(e) => {
-                        // @ts-ignore
+                        // @ts-expect-error Wistia specific behavior
                         e.currentTarget.parentNode.style.opacity = 1;
                       }}
                     />
