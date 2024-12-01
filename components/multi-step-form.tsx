@@ -56,7 +56,7 @@ export default function MultiStepForm({
         };
 
         const response = await fetch(
-          "https://n8n-evvqk-u21881.vm.elestio.app/webhook-test/a4736bb6-a974-47b6-af13-94a6bba1f5d0",
+          "https://n8n-evvqk-u21881.vm.elestio.app/webhook/a4736bb6-a974-47b6-af13-94a6bba1f5d0",
           {
             method: "POST",
             headers: {
