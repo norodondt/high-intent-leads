@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProgressIndicator } from "./progress-indicator";
@@ -46,6 +46,11 @@ export default function MultiStepForm({
   const [selectedSource, setSelectedSource] = useState<LeadSource | null>(null);
   const [similarCompany, setSimilarCompany] = useState("");
   const [customSource, setCustomSource] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const totalSteps = 4;
 
@@ -112,12 +117,15 @@ export default function MultiStepForm({
     }
   };
 
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <div
-      suppressHydrationWarning
       className={cn(
         "bg-gradient-to-b from-background to-muted/20",
-        isEmbedded ? "py-4 px-2" : "min-h-screen py-12 px-4"
+        isEmbedded ? "" : "min-h-screen py-12 px-4"
       )}
       style={
         isEmbedded
@@ -130,13 +138,13 @@ export default function MultiStepForm({
       }
     >
       <div
-        className={cn(
-          "mx-auto space-y-6",
-          isEmbedded ? "max-w-[90%]" : "max-w-3xl"
-        )}
+        className={cn("space-y-6", isEmbedded ? "w-full" : "max-w-3xl mx-auto")}
       >
         <div
-          className={cn("text-center", isEmbedded ? "space-y-2" : "space-y-4")}
+          className={cn(
+            "text-center",
+            isEmbedded ? "space-y-2 pt-2" : "space-y-4"
+          )}
         >
           <div className={cn(isEmbedded ? "pt-2" : "pt-4")}>
             <Button
