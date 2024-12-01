@@ -39,12 +39,22 @@ export default function MultiStepForm({
     },
   });
   const [showVideo, setShowVideo] = useState(false);
+  const [selectedSource, setSelectedSource] = useState<LeadSource | null>(null);
+  const [similarCompany, setSimilarCompany] = useState("");
+  const [customSource, setCustomSource] = useState("");
 
   const totalSteps = 4;
 
   const handleNext = async () => {
     if (currentStep === totalSteps) {
       try {
+        const formDataToSubmit = {
+          ...formData,
+          leadSources: selectedSource ? [selectedSource] : [],
+          similarCompany,
+          customSource,
+        };
+
         const response = await fetch(
           "https://n8n-evvqk-u21881.vm.elestio.app/webhook-test/a4736bb6-a974-47b6-af13-94a6bba1f5d0",
           {
@@ -53,7 +63,7 @@ export default function MultiStepForm({
               "Content-Type": "application/json",
               Accept: "application/json",
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(formDataToSubmit),
           }
         );
 
@@ -83,7 +93,7 @@ export default function MultiStepForm({
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
-        return formData.leadSources.length > 0;
+        return selectedSource !== null;
       case 2:
         return true;
       case 3:
@@ -100,6 +110,7 @@ export default function MultiStepForm({
 
   return (
     <div
+      suppressHydrationWarning
       className={cn(
         "bg-gradient-to-b from-background to-muted/20",
         isEmbedded
@@ -159,28 +170,17 @@ export default function MultiStepForm({
           <CardContent className={cn(isEmbedded ? "pt-4" : "pt-6")}>
             {currentStep === 1 && (
               <StepOne
-                selectedSources={formData.leadSources}
-                onSourceSelect={(source: LeadSource) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    leadSources: prev.leadSources.includes(source)
-                      ? prev.leadSources.filter((s) => s !== source)
-                      : [...prev.leadSources, source],
-                  }));
+                selectedSource={selectedSource}
+                onSourceSelect={(source) => {
+                  setSelectedSource(selectedSource === source ? null : source);
                 }}
-                similarCompany={formData.similarCompany || ""}
-                onSimilarCompanyChange={(value: string) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    similarCompany: value,
-                  }));
+                similarCompany={similarCompany}
+                onSimilarCompanyChange={(value) => {
+                  setSimilarCompany(value);
                 }}
-                customSource={formData.customSource}
-                onCustomSourceChange={(value: string) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    customSource: value,
-                  }));
+                customSource={customSource}
+                onCustomSourceChange={(value) => {
+                  setCustomSource(value);
                 }}
               />
             )}

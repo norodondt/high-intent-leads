@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import type { LeadSource } from "../types/form";
 
 interface StepOneProps {
-  selectedSources: LeadSource[];
+  selectedSource: LeadSource | null;
   onSourceSelect: (source: LeadSource) => void;
   similarCompany: string;
   onSimilarCompanyChange: (value: string) => void;
@@ -25,7 +25,7 @@ interface StepOneProps {
 }
 
 export function StepOne({
-  selectedSources,
+  selectedSource,
   onSourceSelect,
   similarCompany,
   onSimilarCompanyChange,
@@ -97,7 +97,7 @@ export function StepOne({
           Wo sollen wir nach deinen Leads suchen?
         </h2>
         <p className="text-muted-foreground">
-          Wähle alle Quellen aus, die für deine Suche relevant sind
+          Wähle eine Quelle aus, die für deine Suche am relevantesten ist
         </p>
       </div>
 
@@ -109,7 +109,7 @@ export function StepOne({
             className={cn(
               "h-auto p-4 justify-start space-x-4 group hover:shadow-md transition-all duration-200",
               "flex flex-wrap items-start",
-              selectedSources.includes(source.id)
+              selectedSource === source.id
                 ? "border-primary bg-primary/5"
                 : "hover:border-gray-300 hover:bg-gray-50/50"
             )}
@@ -119,20 +119,20 @@ export function StepOne({
               className={cn(
                 "w-10 h-10 rounded-lg flex items-center justify-center transition-colors shrink-0",
                 source.bgColor,
-                selectedSources.includes(source.id) ? "bg-primary/10" : ""
+                selectedSource === source.id ? "bg-primary/10" : ""
               )}
             >
               <source.icon
                 className={cn(
                   "w-5 h-5",
                   source.color,
-                  selectedSources.includes(source.id) ? "text-primary" : ""
+                  selectedSource === source.id ? "text-primary" : ""
                 )}
               />
             </div>
             <div className="flex-1 text-left space-y-1 min-w-[150px]">
               <div className="font-medium leading-tight">{source.label}</div>
-              {selectedSources.includes(source.id) && (
+              {selectedSource === source.id && (
                 <div className="text-xs text-primary-foreground/70">
                   Ausgewählt
                 </div>
@@ -141,20 +141,18 @@ export function StepOne({
             <div
               className={cn(
                 "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors shrink-0",
-                selectedSources.includes(source.id)
+                selectedSource === source.id
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-gray-300"
               )}
             >
-              {selectedSources.includes(source.id) && (
-                <Check className="w-3 h-3" />
-              )}
+              {selectedSource === source.id && <Check className="w-3 h-3" />}
             </div>
           </Button>
         ))}
       </div>
 
-      {selectedSources.includes("similar-companies") && (
+      {selectedSource === "similar-companies" && (
         <div className="space-y-2 animate-in fade-in slide-in-from-bottom-4">
           <Label htmlFor="similar-company">
             Gib ein Referenzunternehmen ein
@@ -168,7 +166,7 @@ export function StepOne({
         </div>
       )}
 
-      {selectedSources.includes("custom-source") && (
+      {selectedSource === "custom-source" && (
         <div className="space-y-2 animate-in fade-in slide-in-from-bottom-4">
           <Label htmlFor="custom-source">Beschreibe deine Quelle</Label>
           <Input
